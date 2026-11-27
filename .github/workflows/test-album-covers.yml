@@ -80,6 +80,7 @@ jobs:
                       raise ValueError('Image request did not return supported photo data')
                   fingerprint = hashlib.sha256(prefix).hexdigest()
                   candidates.append(fingerprint)
+                  print('COVER_RESULT ' + json.dumps({'album': album['url'], 'image': url}, ensure_ascii=True))
                   results.append((name, 'candidate', key, content_type, fingerprint[:12]))
               except Exception as exc:
                   results.append((name, 'unavailable', type(exc).__name__, str(exc)[:160]))
