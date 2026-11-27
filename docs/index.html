@@ -7,9 +7,9 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; connect-src https://vionsmadqxigjmygqtoe.supabase.co; img-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="color-scheme" content="light">
 <title>Troop 120 Toolbox</title>
-<link rel="stylesheet" href="./styles-v10.css">
+<link rel="stylesheet" href="./styles-v11.css">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
-<script defer src="./app-v10.js"></script>
+<script defer src="./app-v11.js"></script>
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
@@ -92,10 +92,11 @@
 <p id="lifecycle-message" class="status" role="status" aria-live="polite"></p>
 <div class="directory-scroll" tabindex="0" role="region" aria-label="Account and member directory">
 <table class="directory-table">
-<thead><tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Type</th><th scope="col">Assigned roles</th><th scope="col">Membership</th><th scope="col">Account</th><th scope="col">Request</th><th scope="col">Family links</th><th scope="col">Actions</th></tr></thead>
+<thead><tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Type</th><th scope="col">Assigned roles</th><th scope="col">Membership</th><th scope="col">Account</th><th scope="col">Request</th><th scope="col">Latest test consent</th><th scope="col">Family links</th><th scope="col">Actions</th></tr></thead>
 <tbody id="directory-body"></tbody>
 </table>
 </div>
+<p class="small">Latest test consent shows only the most recent fictional consent event for each Scout, not valid consent or account eligibility. Scout account assignment remains disabled.</p>
 <p class="small" id="family-view-note">Scouts appear once, indented under a visible linked parent or guardian. Additional family links are noted in the Name column. Filters still apply to each individual record.</p>
 <p class="small">Pending requests take priority in the Request column; otherwise it shows the most recent request. An approved historical request does not mean access is currently assigned.</p>
 <details class="create-member">
@@ -119,6 +120,6 @@
 </section>
 <aside class="notice"><strong>Testing only</strong><p>Do not enter or import actual Scout information. This preview is not ready for production use.</p></aside>
 </main>
-<footer>Troop 120 Toolbox &middot; Application preview 0.10</footer>
+<footer>Troop 120 Toolbox &middot; Application preview 0.11</footer>
 </body>
 </html>
