@@ -7,9 +7,9 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; connect-src https://vionsmadqxigjmygqtoe.supabase.co; img-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="color-scheme" content="light">
 <title>Troop 120 Toolbox</title>
-<link rel="stylesheet" href="./styles-v11.css">
+<link rel="stylesheet" href="./styles-v12.css">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
-<script defer src="./app-v11.js"></script>
+<script defer src="./app-v12.js"></script>
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
@@ -110,16 +110,19 @@
 </details>
 <p id="member-message" class="status" role="status" aria-live="polite"></p>
 <dialog id="manage-dialog" aria-labelledby="manage-title">
-<div class="manage-header"><div><p class="eyebrow">Manage account / member</p><h2 id="manage-title"></h2></div><button type="button" class="secondary" id="manage-close">Close</button></div>
-<p id="manage-email"></p>
+<header class="manage-top">
+<div class="manage-header"><div class="manage-identity"><p class="eyebrow">Manage account / member</p><h2 id="manage-title"></h2><p id="manage-email"></p></div><button type="button" class="secondary" id="manage-close">Close</button></div>
+<div id="manage-summary" class="manage-summary" aria-label="Member summary"></div>
+</header>
+<nav id="manage-tabs" class="manage-tabs" role="tablist" aria-label="Member management sections"></nav>
 <p id="manage-message" class="status" role="status" aria-live="polite"></p>
-<div id="manage-content"></div>
+<div id="manage-content" class="manage-body"></div>
 </dialog>
 </section>
 </div>
 </section>
 <aside class="notice"><strong>Testing only</strong><p>Do not enter or import actual Scout information. This preview is not ready for production use.</p></aside>
 </main>
-<footer>Troop 120 Toolbox &middot; Application preview 0.11</footer>
+<footer>Troop 120 Toolbox &middot; Application preview 0.12</footer>
 </body>
 </html>
