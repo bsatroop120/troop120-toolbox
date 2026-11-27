@@ -7,9 +7,9 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; connect-src https://vionsmadqxigjmygqtoe.supabase.co; img-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="color-scheme" content="light">
 <title>Troop 120 Toolbox</title>
-<link rel="stylesheet" href="./styles-v5.css">
+<link rel="stylesheet" href="./styles-v7.css">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
-<script defer src="./app-v6.js"></script>
+<script defer src="./app-v7.js"></script>
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
@@ -66,23 +66,24 @@
 <section id="admin-panel" hidden>
 <p class="eyebrow">Administration</p>
 <div class="directory-header">
-<div><h2>Accounts &amp; members</h2><p>Manage access requests and membership records in one place.</p></div>
+<div><h2>Accounts &amp; members</h2><p>Manage accounts, membership records and family relationships in one place.</p></div>
 <button type="button" id="admin-refresh" class="secondary">Refresh</button>
 </div>
 <div class="directory-filters" aria-label="Filter accounts and members">
-<div class="field search-field"><label for="directory-search">Search</label><input id="directory-search" type="search" placeholder="Name or email" autocomplete="off"></div>
+<div class="field search-field"><label for="directory-search">Search</label><input id="directory-search" type="search" placeholder="Name, email or linked family member" autocomplete="off"></div>
 <div class="field"><label for="directory-role">Assigned role</label><select id="directory-role"><option value="">All roles</option><option value="admin">Administrator</option><option value="leader">Adult leader</option><option value="parent">Parent or guardian</option><option value="scout">Scout</option><option value="none">No roles</option></select></div>
 <div class="field"><label for="directory-type">Member type</label><select id="directory-type"><option value="">All types</option><option value="adult">Adult</option><option value="youth">Scout</option><option value="none">No member</option></select></div>
 <div class="field"><label for="directory-status">Membership</label><select id="directory-status"><option value="">All statuses</option><option value="active">Active</option><option value="inactive">Inactive</option><option value="none">No member</option></select></div>
 <div class="field"><label for="directory-link">Account</label><select id="directory-link"><option value="">All accounts</option><option value="linked">Linked</option><option value="unlinked">Not linked</option><option value="applicant">Applicant only</option></select></div>
 <div class="field"><label for="directory-request">Request status</label><select id="directory-request"><option value="">All requests</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="denied">Denied</option><option value="none">No requests</option></select></div>
+<div class="field"><label for="directory-family">Family links</label><select id="directory-family"><option value="">All members</option><option value="linked">Has family links</option><option value="none">No family links</option></select></div>
 </div>
 <div class="directory-toolbar"><p id="directory-count" role="status" aria-live="polite">Loading records...</p><button id="directory-clear" type="button" class="secondary">Clear filters</button></div>
 <p id="admin-message" class="status" role="status" aria-live="polite"></p>
 <p id="lifecycle-message" class="status" role="status" aria-live="polite"></p>
 <div class="directory-scroll" tabindex="0" role="region" aria-label="Account and member directory">
 <table class="directory-table">
-<thead><tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Type</th><th scope="col">Assigned roles</th><th scope="col">Membership</th><th scope="col">Account</th><th scope="col">Request</th><th scope="col">Actions</th></tr></thead>
+<thead><tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Type</th><th scope="col">Assigned roles</th><th scope="col">Membership</th><th scope="col">Account</th><th scope="col">Request</th><th scope="col">Family links</th><th scope="col">Actions</th></tr></thead>
 <tbody id="directory-body"></tbody>
 </table>
 </div>
@@ -108,6 +109,6 @@
 </section>
 <aside class="notice"><strong>Testing only</strong><p>Do not enter or import actual Scout information. This preview is not ready for production use.</p></aside>
 </main>
-<footer>Troop 120 Toolbox &middot; Application preview 0.6</footer>
+<footer>Troop 120 Toolbox &middot; Application preview 0.7</footer>
 </body>
 </html>
