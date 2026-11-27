@@ -7,9 +7,9 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; connect-src https://vionsmadqxigjmygqtoe.supabase.co; img-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="color-scheme" content="light">
 <title>Troop 120 Toolbox</title>
-<link rel="stylesheet" href="./styles-v4.css">
+<link rel="stylesheet" href="./styles-v5.css">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
-<script defer src="./app-v4.js"></script>
+<script defer src="./app-v5.js"></script>
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
@@ -65,31 +65,50 @@
 </div>
 </section>
 <section id="admin-panel" hidden>
-<p class="eyebrow">Administration</p><h2>Account requests</h2>
-<p>Review applicant identity and associate an account with an existing troop member. Use fictional records only in this preview.</p>
-<p class="small">Only adult leader approvals are enabled in this interface for testing. Parent and Scout approval controls will follow after family and consent workflows are established.</p>
-<button type="button" id="admin-refresh" class="secondary">Refresh requests and members</button>
+<p class="eyebrow">Administration</p>
+<div class="directory-header">
+<div><h2>Accounts &amp; members</h2><p>Manage access requests and membership records in one place.</p></div>
+<button type="button" id="admin-refresh" class="secondary">Refresh</button>
+</div>
+<div class="directory-filters" aria-label="Filter accounts and members">
+<div class="field search-field"><label for="directory-search">Search</label><input id="directory-search" type="search" placeholder="Name or email" autocomplete="off"></div>
+<div class="field"><label for="directory-role">Assigned role</label><select id="directory-role"><option value="">All roles</option><option value="admin">Administrator</option><option value="leader">Adult leader</option><option value="parent">Parent or guardian</option><option value="scout">Scout</option><option value="none">No roles</option></select></div>
+<div class="field"><label for="directory-type">Member type</label><select id="directory-type"><option value="">All types</option><option value="adult">Adult</option><option value="youth">Scout</option><option value="none">No member</option></select></div>
+<div class="field"><label for="directory-status">Membership</label><select id="directory-status"><option value="">All statuses</option><option value="active">Active</option><option value="inactive">Inactive</option><option value="none">No member</option></select></div>
+<div class="field"><label for="directory-link">Account</label><select id="directory-link"><option value="">All accounts</option><option value="linked">Linked</option><option value="unlinked">Not linked</option><option value="applicant">Applicant only</option></select></div>
+<div class="field"><label for="directory-request">Request status</label><select id="directory-request"><option value="">All requests</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="denied">Denied</option><option value="none">No requests</option></select></div>
+</div>
+<div class="directory-toolbar"><p id="directory-count" role="status" aria-live="polite">Loading records...</p><button id="directory-clear" type="button" class="secondary">Clear filters</button></div>
 <p id="admin-message" class="status" role="status" aria-live="polite"></p>
-<ul id="admin-requests" class="request-list"></ul>
-<div class="admin-divider">
-<h2>Member management</h2>
-<p>Create a fictional roster record before approving a test account.</p>
+<p id="lifecycle-message" class="status" role="status" aria-live="polite"></p>
+<div class="directory-scroll" tabindex="0" role="region" aria-label="Account and member directory">
+<table class="directory-table">
+<thead><tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Type</th><th scope="col">Assigned roles</th><th scope="col">Membership</th><th scope="col">Account</th><th scope="col">Request</th><th scope="col">Actions</th></tr></thead>
+<tbody id="directory-body"></tbody>
+</table>
+</div>
+<p class="small">Pending requests take priority in the Request column; otherwise it shows the most recent request. An approved historical request does not mean access is currently assigned.</p>
+<details class="create-member">
+<summary>Add test member</summary>
+<p>Create a fictional roster record before linking an account.</p>
 <form id="member-form">
 <div class="field"><label for="member-name">Test member name</label><input id="member-name" maxlength="100" required autocomplete="off" placeholder="Test Adult Leader"></div>
 <div class="field"><label for="member-type">Member type</label><select id="member-type" required><option value="">Choose member type</option><option value="adult">Adult</option><option value="youth">Scout</option></select></div>
 <button id="member-create" type="submit">Create test member</button>
 </form>
+</details>
 <p id="member-message" class="status" role="status" aria-live="polite"></p>
-<h3>Member records</h3>
-<p class="small">Expand a member to edit their name, change membership status or revoke an assigned role. Deactivation removes troop roles; reactivation requires a new approval. Administrator accounts are protected.</p>
-<p id="lifecycle-message" class="status" role="status" aria-live="polite"></p>
-<ul id="admin-members" class="request-list"></ul>
-</div>
+<dialog id="manage-dialog" aria-labelledby="manage-title">
+<div class="manage-header"><div><p class="eyebrow">Manage account / member</p><h2 id="manage-title"></h2></div><button type="button" class="secondary" id="manage-close">Close</button></div>
+<p id="manage-email"></p>
+<p id="manage-message" class="status" role="status" aria-live="polite"></p>
+<div id="manage-content"></div>
+</dialog>
 </section>
 </div>
 </section>
 <aside class="notice"><strong>Testing only</strong><p>Do not enter or import actual Scout information. This preview is not ready for production use.</p></aside>
 </main>
-<footer>Troop 120 Toolbox &middot; Application preview 0.4</footer>
+<footer>Troop 120 Toolbox &middot; Application preview 0.5</footer>
 </body>
 </html>
