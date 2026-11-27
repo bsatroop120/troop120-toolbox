@@ -7,9 +7,9 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; connect-src https://vionsmadqxigjmygqtoe.supabase.co; img-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="color-scheme" content="light">
 <title>Troop 120 Toolbox</title>
-<link rel="stylesheet" href="./styles-v8.css">
+<link rel="stylesheet" href="./styles-v10.css">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
-<script defer src="./app-v9.js"></script>
+<script defer src="./app-v10.js"></script>
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
@@ -63,6 +63,15 @@
 <div class="module"><span class="badge">Planned</span><h3>Reports &amp; tools</h3><p>Useful reporting and administrative tools.</p></div>
 </div>
 </section>
+<section id="my-scouts-panel" hidden>
+<p class="eyebrow">Family dashboard</p>
+<div class="directory-header"><div><h2>My Scouts</h2><p>Active Scouts linked to your parent or guardian membership.</p></div><button id="my-scouts-refresh" type="button" class="secondary">Refresh</button></div>
+<p id="my-scouts-message" class="status" role="status" aria-live="polite"></p>
+<div class="directory-scroll" role="region" aria-label="My Scouts" tabindex="0">
+<table class="directory-table"><thead><tr><th scope="col">Scout name</th><th scope="col">Your relationship</th><th scope="col">Membership</th></tr></thead><tbody id="my-scouts-body"></tbody></table>
+</div>
+<p class="small">Advancement, attendance and camping history are planned. This preview shows fictional membership information only.</p>
+</section>
 <section id="admin-panel" hidden>
 <p class="eyebrow">Administration</p>
 <div class="directory-header">
@@ -110,6 +119,6 @@
 </section>
 <aside class="notice"><strong>Testing only</strong><p>Do not enter or import actual Scout information. This preview is not ready for production use.</p></aside>
 </main>
-<footer>Troop 120 Toolbox &middot; Application preview 0.9</footer>
+<footer>Troop 120 Toolbox &middot; Application preview 0.10</footer>
 </body>
 </html>
