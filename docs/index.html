@@ -9,7 +9,7 @@
 <title>Troop 120 Toolbox</title>
 <link rel="stylesheet" href="./styles-v5.css">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
-<script defer src="./app-v5.js"></script>
+<script defer src="./app-v6.js"></script>
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
@@ -40,14 +40,13 @@
 <div class="panel">
 <section id="access-panel" hidden>
 <p class="eyebrow">Account access</p><h2>Request troop access</h2>
-<p>Registration requires administrator approval. For this preview, use fictional details only.</p>
+<p>Request access using your name. An administrator will verify your identity, link your membership and assign your roles. For this preview, use fictional details only.</p>
 <form id="request-form">
 <div class="field"><label for="display-name">Test display name</label><input id="display-name" required maxlength="100" autocomplete="off" placeholder="Test Applicant"></div>
-<div class="field"><label for="requested-role">Requested role</label><select id="requested-role" required><option value="">Choose a role</option><option value="parent">Parent or guardian</option><option value="leader">Adult leader</option><option value="scout">Scout</option></select></div>
 <button id="request-submit" type="submit">Submit access request</button>
 </form>
 <p id="request-message" class="status" role="status" aria-live="polite"></p>
-<h3>My requests</h3><ul id="own-requests" class="request-list"></ul>
+<h3>Access request history</h3><p class="small">Past approvals do not guarantee current access. Your current assigned roles are shown in Your account.</p><ul id="own-requests" class="request-list"></ul>
 </section>
 <section id="overview-panel" hidden>
 <p class="eyebrow">Troop dashboard</p><h2 id="unit-title">Troop 120</h2>
@@ -109,6 +108,6 @@
 </section>
 <aside class="notice"><strong>Testing only</strong><p>Do not enter or import actual Scout information. This preview is not ready for production use.</p></aside>
 </main>
-<footer>Troop 120 Toolbox &middot; Application preview 0.5</footer>
+<footer>Troop 120 Toolbox &middot; Application preview 0.6</footer>
 </body>
 </html>
