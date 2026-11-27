@@ -4,18 +4,27 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; connect-src https://vionsmadqxigjmygqtoe.supabase.co; img-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; connect-src https://vionsmadqxigjmygqtoe.supabase.co; img-src 'self' https://lh3.googleusercontent.com https://lh4.googleusercontent.com https://lh5.googleusercontent.com https://lh6.googleusercontent.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="color-scheme" content="light">
 <title>Troop 120 Toolbox</title>
-<link rel="stylesheet" href="./styles-v12.css">
+<link rel="stylesheet" href="./styles-v13.css">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
-<script defer src="./app-v12.js"></script>
+<script defer src="./app-v13.js"></script>
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
-<div class="unit-mark" aria-hidden="true">120</div>
-<div><strong>Troop 120</strong><span>Toolbox</span></div>
-<span class="tag">Development preview</span>
+<div class="unit-brand"><div class="unit-mark" aria-hidden="true">120</div><div><strong>Troop 120 Toolbox</strong><span>Troop 120 &ndash; Seneca, SC</span></div></div>
+<nav id="family-navigation" class="family-navigation" aria-label="Personal and family tools" hidden></nav>
+<span id="preview-tag" class="tag">Development preview</span>
+<div id="account-control" class="account-control" hidden>
+<button id="account-toggle" type="button" aria-expanded="false" aria-controls="account-menu"><span class="avatar"><img id="google-avatar" alt="" hidden><span id="avatar-initial">?</span></span><span id="google-name">Your account</span><span aria-hidden="true">&#9662;</span></button>
+<div id="account-menu" class="account-menu" hidden>
+<p class="google-provider">Signed in with Google</p>
+<div class="account"><strong id="account-email"></strong><p id="role-status"></p></div>
+<nav id="account-navigation" aria-label="Account tools"></nav>
+<button type="button" id="sign-out" class="secondary">Sign out</button>
+</div>
+</div>
 </div></header>
 <main id="main">
 <section id="login-card" class="card" aria-labelledby="title">
@@ -30,14 +39,13 @@
 <noscript><p>JavaScript is required to sign in.</p></noscript>
 </section>
 <section id="workspace" class="workspace-grid" hidden>
-<aside class="sidebar">
-<p class="eyebrow">Your account</p>
-<div class="account"><strong id="account-email"></strong><p id="role-status"></p></div>
-<nav id="navigation" aria-label="Toolbox sections"></nav>
-<button type="button" id="sign-out" class="secondary">Sign out</button>
-<p id="workspace-status" class="status" role="status" aria-live="polite"></p>
+<aside class="sidebar" id="troop-sidebar" hidden>
+<p class="eyebrow">Troop tools</p>
+<nav id="navigation" aria-label="Troop tools"></nav>
+<div class="sidebar-landscape" aria-hidden="true"></div>
 </aside>
 <div class="panel">
+<p id="workspace-status" class="status workspace-status" role="status" aria-live="polite"></p>
 <section id="access-panel" hidden>
 <p class="eyebrow">Account access</p><h2>Request troop access</h2>
 <p>Request access using your name. An administrator will verify your identity, link your membership and assign your roles. For this preview, use fictional details only.</p>
@@ -50,18 +58,15 @@
 </section>
 <section id="overview-panel" hidden>
 <p class="eyebrow">Troop dashboard</p><h2 id="unit-title">Troop 120</h2>
-<p>Overview of the information available to your assigned account.</p>
+<p>Welcome to your Toolbox. Plan, prepare and stay connected with Troop 120.</p>
 <div class="stat-grid">
 <div class="stat"><strong id="member-count">&mdash;</strong><span>Visible member records</span></div>
 <div class="stat"><strong id="patrol-count">&mdash;</strong><span>Visible patrols</span></div>
 <div class="stat"><strong id="role-count">&mdash;</strong><span>Your assigned roles</span></div>
 </div>
-<div class="module-grid">
-<div class="module"><span class="badge">Planned</span><h3>Calendar &amp; RSVP</h3><p>BAND remains the source for events and responses.</p></div>
-<div class="module"><span class="badge">Planned</span><h3>Advancement</h3><p>Scoutbook integration is subject to access research.</p></div>
-<div class="module"><span class="badge">Planned</span><h3>Troop planning</h3><p>Meeting plans, activities and leader resources.</p></div>
-<div class="module"><span class="badge">Planned</span><h3>Reports &amp; tools</h3><p>Useful reporting and administrative tools.</p></div>
-</div>
+<div class="dashboard-banner"><div><p class="eyebrow">Be prepared</p><h3>Ready for the next adventure?</h3><p>Troop resources, planning and family information in one place.</p></div><span class="badge">Development preview</span></div>
+<h3>Troop toolbox</h3><p class="small">Choose a tool below or from the left navigation. Planned modules do not contain live data yet.</p>
+<div id="dashboard-tools" class="module-grid"></div>
 </section>
 <section id="my-scouts-panel" hidden>
 <p class="eyebrow">Family dashboard</p>
@@ -71,6 +76,16 @@
 <table class="directory-table"><thead><tr><th scope="col">Scout name</th><th scope="col">Your relationship</th><th scope="col">Membership</th></tr></thead><tbody id="my-scouts-body"></tbody></table>
 </div>
 <p class="small">Advancement, attendance and camping history are planned. This preview shows fictional membership information only.</p>
+</section>
+<section id="profile-panel" hidden>
+<p class="eyebrow">Your account</p><h2>My Profile</h2>
+<div class="profile-grid"><div class="module"><h3>Google account</h3><p id="profile-name"></p><p id="profile-email"></p></div><div class="module"><h3>Troop access</h3><p id="profile-roles"></p></div></div>
+<p class="small">Your sign-in identity comes from Google. Troop roles are assigned by an administrator.</p>
+<button id="profile-access" class="secondary" type="button">View my access requests</button>
+</section>
+<section id="planned-panel" hidden>
+<p id="planned-category" class="eyebrow"></p><h2 id="planned-title"></h2>
+<div class="module planned-module"><span class="badge">Planned &middot; not available yet</span><h3>Coming to the Toolbox</h3><p id="planned-description"></p><p class="small">This preview is a navigation placeholder. No information is being imported or saved by this module.</p></div>
 </section>
 <section id="admin-panel" hidden>
 <p class="eyebrow">Administration</p>
@@ -123,6 +138,6 @@
 </section>
 <aside class="notice"><strong>Testing only</strong><p>Do not enter or import actual Scout information. This preview is not ready for production use.</p></aside>
 </main>
-<footer>Troop 120 Toolbox &middot; Application preview 0.12</footer>
+<footer>Troop 120 Toolbox &middot; Application preview 0.13</footer>
 </body>
 </html>
