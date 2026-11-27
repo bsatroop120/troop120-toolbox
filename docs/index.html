@@ -7,9 +7,9 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; connect-src https://vionsmadqxigjmygqtoe.supabase.co; img-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="color-scheme" content="light">
 <title>Troop 120 Toolbox</title>
-<link rel="stylesheet" href="./styles-v2.css">
+<link rel="stylesheet" href="./styles-v3.css">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
-<script defer src="./app-v2.js"></script>
+<script defer src="./app-v3.js"></script>
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
@@ -66,13 +66,28 @@
 </section>
 <section id="admin-panel" hidden>
 <p class="eyebrow">Administration</p><h2>Account requests</h2>
-<p>Read-only preview of requests visible to authorized administrators. Approval controls and member management are not available yet.</p>
+<p>Review applicant identity and associate an account with an existing troop member. Use fictional records only in this preview.</p>
+<p class="small">Only adult leader approvals are enabled in this interface for testing. Parent and Scout approval controls will follow after family and consent workflows are established.</p>
+<button type="button" id="admin-refresh" class="secondary">Refresh requests and members</button>
+<p id="admin-message" class="status" role="status" aria-live="polite"></p>
 <ul id="admin-requests" class="request-list"></ul>
+<div class="admin-divider">
+<h2>Member management</h2>
+<p>Create a fictional roster record before approving a test account.</p>
+<form id="member-form">
+<div class="field"><label for="member-name">Test member name</label><input id="member-name" maxlength="100" required autocomplete="off" placeholder="Test Adult Leader"></div>
+<div class="field"><label for="member-type">Member type</label><select id="member-type" required><option value="">Choose member type</option><option value="adult">Adult</option><option value="youth">Scout</option></select></div>
+<button id="member-create" type="submit">Create test member</button>
+</form>
+<p id="member-message" class="status" role="status" aria-live="polite"></p>
+<h3>Member records</h3>
+<ul id="admin-members" class="request-list"></ul>
+</div>
 </section>
 </div>
 </section>
 <aside class="notice"><strong>Testing only</strong><p>Do not enter or import actual Scout information. This preview is not ready for production use.</p></aside>
 </main>
-<footer>Troop 120 Toolbox &middot; Application preview 0.2</footer>
+<footer>Troop 120 Toolbox &middot; Application preview 0.3</footer>
 </body>
 </html>
