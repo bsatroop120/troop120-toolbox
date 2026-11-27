@@ -7,9 +7,9 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; connect-src https://vionsmadqxigjmygqtoe.supabase.co; img-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="color-scheme" content="light">
 <title>Troop 120 Toolbox</title>
-<link rel="stylesheet" href="./styles-v7.css">
+<link rel="stylesheet" href="./styles-v8.css">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
-<script defer src="./app-v7.js"></script>
+<script defer src="./app-v8.js"></script>
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
@@ -78,7 +78,7 @@
 <div class="field"><label for="directory-request">Request status</label><select id="directory-request"><option value="">All requests</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="denied">Denied</option><option value="none">No requests</option></select></div>
 <div class="field"><label for="directory-family">Family links</label><select id="directory-family"><option value="">All members</option><option value="linked">Has family links</option><option value="none">No family links</option></select></div>
 </div>
-<div class="directory-toolbar"><p id="directory-count" role="status" aria-live="polite">Loading records...</p><button id="directory-clear" type="button" class="secondary">Clear filters</button></div>
+<div class="directory-toolbar"><p id="directory-count" role="status" aria-live="polite">Loading records...</p><div class="directory-view-controls"><label for="directory-view">View</label><select id="directory-view"><option value="family">Family grouping</option><option value="flat">Alphabetical list</option></select><button id="directory-clear" type="button" class="secondary">Clear filters</button></div></div>
 <p id="admin-message" class="status" role="status" aria-live="polite"></p>
 <p id="lifecycle-message" class="status" role="status" aria-live="polite"></p>
 <div class="directory-scroll" tabindex="0" role="region" aria-label="Account and member directory">
@@ -87,6 +87,7 @@
 <tbody id="directory-body"></tbody>
 </table>
 </div>
+<p class="small" id="family-view-note">Scouts appear once, indented under a visible linked parent or guardian. Additional family links are noted in the Name column. Filters still apply to each individual record.</p>
 <p class="small">Pending requests take priority in the Request column; otherwise it shows the most recent request. An approved historical request does not mean access is currently assigned.</p>
 <details class="create-member">
 <summary>Add test member</summary>
@@ -109,6 +110,6 @@
 </section>
 <aside class="notice"><strong>Testing only</strong><p>Do not enter or import actual Scout information. This preview is not ready for production use.</p></aside>
 </main>
-<footer>Troop 120 Toolbox &middot; Application preview 0.7</footer>
+<footer>Troop 120 Toolbox &middot; Application preview 0.8</footer>
 </body>
 </html>
