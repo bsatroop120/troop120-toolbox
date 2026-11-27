@@ -12,7 +12,7 @@ set assigned_role = requested_role
 where status = 'approved';
 
 alter table public.access_requests
-    add constraint access_requests_assigned_role_check
+    add constraint access_requests_approval_role_consistency_check
     check ((status = 'approved' and assigned_role is not null)
            or (status <> 'approved' and assigned_role is null));
 
