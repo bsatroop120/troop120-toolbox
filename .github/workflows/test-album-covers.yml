@@ -1,0 +1,92 @@
+name: Test Google Photos album covers
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/test-album-covers.yml'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe five public album links
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, hashlib, urllib.request, urllib.parse
+          from html.parser import HTMLParser
+          from pathlib import Path
+
+          class Meta(HTMLParser):
+              def __init__(self):
+                  super().__init__(convert_charrefs=True)
+                  self.values = {}
+              def handle_starttag(self, tag, attrs):
+                  if tag == 'meta':
+                      a = dict(attrs)
+                      key = a.get('property') or a.get('name') or a.get('itemprop')
+                      if key and a.get('content'):
+                          self.values.setdefault(key.lower(), a['content'])
+
+          def approved(url, image=False):
+              u = urllib.parse.urlsplit(url)
+              if u.scheme != 'https' or u.username or u.password:
+                  return False
+              h = u.hostname or ''
+              if image:
+                  return h == 'googleusercontent.com' or h.endswith('.googleusercontent.com')
+              return h in ('photos.app.goo.gl', 'goo.gl', 'photos.google.com')
+
+          class SafeRedirect(urllib.request.HTTPRedirectHandler):
+              def __init__(self, image):
+                  self.image = image
+              def redirect_request(self, req, fp, code, msg, headers, newurl):
+                  if not approved(newurl, self.image):
+                      raise ValueError('Redirect outside permitted Google Photos hosts')
+                  return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+          def request(url, image=False):
+              if not approved(url, image):
+                  raise ValueError('Unapproved URL')
+              req = urllib.request.Request(url, headers={'User-Agent':'Troop120Toolbox-CoverTest/1.0', 'Accept':'image/*' if image else 'text/html'})
+              return urllib.request.build_opener(SafeRedirect(image)).open(req, timeout=12)
+
+          source = Path('docs/albums-v15.js').read_text(encoding='utf-8')
+          albums = json.loads(source.split('window.TROOP_PUBLIC_ALBUMS = ', 1)[1].strip().rstrip(';'))
+          candidates = []
+          results = []
+          for album in albums[:5]:
+              name = album['title']
+              try:
+                  with request(album['url']) as response:
+                      final = response.geturl()
+                      html = response.read(5_000_000).decode('utf-8', errors='replace')
+                  meta = Meta()
+                  meta.feed(html)
+                  key = next((k for k in ('og:image:secure_url','og:image','twitter:image','twitter:image:src') if meta.values.get(k)), None)
+                  if not key:
+                      raise ValueError('No supported image metadata found')
+                  url = urllib.parse.urljoin(final, meta.values[key])
+                  if not approved(url, True):
+                      raise ValueError('Image metadata not on approved Google image host')
+                  with request(url, True) as img:
+                      content_type = img.headers.get_content_type()
+                      prefix = img.read(65536)
+                  if content_type not in ('image/jpeg','image/png','image/webp','image/avif') or not prefix:
+                      raise ValueError('Image request did not return supported photo data')
+                  fingerprint = hashlib.sha256(prefix).hexdigest()
+                  candidates.append(fingerprint)
+                  results.append((name, 'candidate', key, content_type, fingerprint[:12]))
+              except Exception as exc:
+                  results.append((name, 'unavailable', type(exc).__name__, str(exc)[:160]))
+          for row in results:
+              print(' | '.join(row))
+          print(f'Candidate images: {len(candidates)}/5; distinct image fingerprints: {len(set(candidates))}')
+          print('Metadata candidates are not proof of actual album cover identity or URL durability.')
+          if len(candidates) != 5 or len(set(candidates)) != 5:
+              raise SystemExit('Cover probe did not yield five distinct usable candidate images.')
+          PY
