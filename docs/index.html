@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; connect-src https://vionsmadqxigjmygqtoe.supabase.co; img-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="color-scheme" content="light">
+  <title>Troop 120 Toolbox | Sign in</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="unit-mark" aria-hidden="true">120</div>
+      <div><strong>Troop 120</strong><span>Toolbox</span></div>
+      <span class="tag">Development preview</span>
+    </div>
+  </header>
+  <main>
+    <section class="card" aria-labelledby="title">
+      <p class="eyebrow">Troop management portal</p>
+      <h1 id="title">Welcome to the Toolbox</h1>
+      <p class="intro">A central place for troop planning, resources and administration.</p>
+      <div id="signed-out" hidden>
+        <button type="button" id="google-sign-in" disabled>Continue with Google <span aria-hidden="true">&rarr;</span></button>
+        <p class="small">Sign in with an authorized test account. Signing in does not grant access to troop records.</p>
+      </div>
+      <div id="signed-in" hidden>
+        <div class="account">
+          <span class="eyebrow">Signed in as</span>
+          <strong id="account-email"></strong>
+          <p id="role-status"></p>
+        </div>
+        <button type="button" id="sign-out" class="secondary">Sign out</button>
+      </div>
+      <p id="status" class="status" role="status" aria-live="polite">Connecting to authentication...</p>
+      <noscript><p>JavaScript is required to sign in.</p></noscript>
+    </section>
+    <aside class="notice"><strong>Testing only</strong><p>This preview verifies authentication and account access. Please do not enter or import actual Scout information.</p></aside>
+  </main>
+  <footer>Troop 120 Toolbox &middot; Initial backend validation</footer>
+</body>
+</html>
