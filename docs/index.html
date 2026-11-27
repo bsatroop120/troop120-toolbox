@@ -7,9 +7,9 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; connect-src https://vionsmadqxigjmygqtoe.supabase.co; img-src 'self' https://lh3.googleusercontent.com https://lh4.googleusercontent.com https://lh5.googleusercontent.com https://lh6.googleusercontent.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="color-scheme" content="light">
 <title>Troop 120 Toolbox</title>
-<link rel="stylesheet" href="./styles-v13.css">
+<link rel="stylesheet" href="./styles-v14.css">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
-<script defer src="./app-v13.js"></script>
+<script defer src="./app-v14.js"></script>
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
@@ -83,6 +83,19 @@
 <p class="small">Your sign-in identity comes from Google. Troop roles are assigned by an administrator.</p>
 <button id="profile-access" class="secondary" type="button">View my access requests</button>
 </section>
+<section id="photos-panel" hidden>
+<div class="photos-heading"><div><p class="eyebrow">Troop memories</p><h2>Pictures &amp; Albums</h2><p>Explore our adventures, one album at a time.</p></div><button type="button" id="photos-add" hidden>+ Add album</button></div>
+<p class="photos-preview"><strong>Gallery preview</strong> &middot; Sample events and illustrative covers only. No actual Scout pictures or Google Photos links have been imported.</p>
+<div class="photos-filters">
+<div class="field photos-search"><label for="photos-search">Search albums</label><input type="search" id="photos-search" placeholder="Event, location or category"></div>
+<div class="field"><label for="photos-year">Year</label><select id="photos-year"><option value="">All years</option></select></div>
+<div class="field"><label for="photos-category">Event type</label><select id="photos-category"><option value="">All events</option></select></div>
+<div class="field"><label for="photos-sort">Sort by</label><select id="photos-sort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="name">Album name</option></select></div>
+</div>
+<div class="photos-toolbar"><p id="photos-count" role="status" aria-live="polite"></p><div class="photos-view"><button type="button" id="photos-reset" class="secondary">Clear filters</button><div class="photos-switch" role="group" aria-label="Gallery layout"><button id="photos-grid-view" type="button" aria-pressed="true">Grid</button><button id="photos-list-view" type="button" aria-pressed="false">List</button></div></div></div>
+<div id="photos-gallery" class="photos-gallery"></div>
+<dialog id="photos-dialog" aria-labelledby="photos-dialog-title"><div class="photos-dialog-head"><h2 id="photos-dialog-title"></h2><button type="button" id="photos-close" class="secondary">Close</button></div><div id="photos-dialog-body"></div></dialog>
+</section>
 <section id="planned-panel" hidden>
 <p id="planned-category" class="eyebrow"></p><h2 id="planned-title"></h2>
 <div class="module planned-module"><span class="badge">Planned &middot; not available yet</span><h3>Coming to the Toolbox</h3><p id="planned-description"></p><p class="small">This preview is a navigation placeholder. No information is being imported or saved by this module.</p></div>
@@ -138,6 +151,6 @@
 </section>
 <aside class="notice"><strong>Testing only</strong><p>Do not enter or import actual Scout information. This preview is not ready for production use.</p></aside>
 </main>
-<footer>Troop 120 Toolbox &middot; Application preview 0.13</footer>
+<footer>Troop 120 Toolbox &middot; Application preview 0.14</footer>
 </body>
 </html>
