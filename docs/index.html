@@ -7,9 +7,9 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; connect-src https://vionsmadqxigjmygqtoe.supabase.co; img-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="color-scheme" content="light">
 <title>Troop 120 Toolbox</title>
-<link rel="stylesheet" href="./styles-v3.css">
+<link rel="stylesheet" href="./styles-v4.css">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
-<script defer src="./app-v3.js"></script>
+<script defer src="./app-v4.js"></script>
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
@@ -81,6 +81,8 @@
 </form>
 <p id="member-message" class="status" role="status" aria-live="polite"></p>
 <h3>Member records</h3>
+<p class="small">Expand a member to edit their name, change membership status or revoke an assigned role. Deactivation removes troop roles; reactivation requires a new approval. Administrator accounts are protected.</p>
+<p id="lifecycle-message" class="status" role="status" aria-live="polite"></p>
 <ul id="admin-members" class="request-list"></ul>
 </div>
 </section>
@@ -88,6 +90,6 @@
 </section>
 <aside class="notice"><strong>Testing only</strong><p>Do not enter or import actual Scout information. This preview is not ready for production use.</p></aside>
 </main>
-<footer>Troop 120 Toolbox &middot; Application preview 0.3</footer>
+<footer>Troop 120 Toolbox &middot; Application preview 0.4</footer>
 </body>
 </html>
