@@ -11,7 +11,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
 <script defer src="./albums-v15.js"></script>
 <script defer src="./album-covers-v17.js"></script>
-<script defer src="./app-v58.js"></script>
+<script defer src="./app-v59.js"></script>
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
@@ -118,12 +118,7 @@
 <section id="band-admin-panel" hidden>
 <div class="band-heading"><h2>BAND Integration</h2><button type="button" id="band-refresh">Sync Events from BAND</button></div>
 <p>Upcoming events are imported from the private BAND calendar subscription. The subscription URL is stored securely in Supabase and is not displayed here.</p>
-<div class="band-default-settings">
-<div class="field"><label for="band-default-range">Default Upcoming Events display</label><select id="band-default-range" disabled><option value="2">2 months</option><option value="3">3 months</option><option value="8">8 months</option><option value="12">12 months</option><option value="0">All Events</option></select></div>
-<button type="button" id="band-default-save" disabled>Save Default</button>
-<p id="band-default-status" class="status" role="status" aria-live="polite"></p>
-<p class="small">Applies to Home for all troop members. Members may temporarily select a different range.</p>
-</div>
+<p class="small">Home displays all imported upcoming events, excluding regular Troop Meetings and respecting the optional PLC and Parent Meeting filter.</p>
 <p id="band-admin-status" class="status" role="status" aria-live="polite"></p>
 <p id="band-admin-synced" class="small band-synced"></p>
 <div id="band-admin-events" class="band-events"></div>
@@ -209,6 +204,6 @@
 </section>
 <aside class="notice"><strong>Testing only</strong><p>Do not enter or import actual Scout information. This preview is not ready for production use.</p></aside>
 </main>
-<footer>Troop 120 Toolbox &middot; Application preview 0.58</footer>
+<footer>Troop 120 Toolbox &middot; Application preview 0.59</footer>
 </body>
 </html>
