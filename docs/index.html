@@ -7,11 +7,11 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; connect-src https://vionsmadqxigjmygqtoe.supabase.co; img-src 'self' https://lh3.googleusercontent.com https://lh4.googleusercontent.com https://lh5.googleusercontent.com https://lh6.googleusercontent.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="color-scheme" content="light">
 <title>Troop 120 Toolbox</title>
-<link rel="stylesheet" href="./styles-v41.css">
+<link rel="stylesheet" href="./styles-v43.css">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
 <script defer src="./albums-v15.js"></script>
 <script defer src="./album-covers-v17.js"></script>
-<script defer src="./app-v42.js"></script>
+<script defer src="./app-v43.js"></script>
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
@@ -71,6 +71,12 @@
 <div class="stat"><strong id="role-count">&mdash;</strong><span>Your assigned roles</span></div>
 </div>
 <div class="dashboard-banner"><div><p class="eyebrow">Be prepared</p><h3>Ready for the next adventure?</h3><p>Troop resources, planning and family information in one place.</p></div><span class="badge">Development preview</span></div>
+<section class="band-upcoming" aria-labelledby="band-home-heading">
+<div class="band-heading"><h3 id="band-home-heading">Upcoming Events</h3><a class="band-link" href="https://band.us/" target="_blank" rel="noopener noreferrer">Open BAND &#8599;</a></div>
+<p id="band-home-status" class="status" role="status" aria-live="polite"></p>
+<div id="band-home-events" class="band-events"></div>
+<p id="band-home-synced" class="small band-synced"></p>
+</section>
 <h3>Troop toolbox</h3><p class="small">Choose a tool below or from the left navigation. Planned modules do not contain live data yet.</p>
 <div id="dashboard-tools" class="module-grid"></div>
 </section>
@@ -102,6 +108,14 @@
 <div id="photos-gallery" class="photos-gallery"></div>
 <button id="photos-more" type="button" class="secondary" hidden>Show more albums</button>
 <dialog id="photos-dialog" aria-labelledby="photos-dialog-title"><div class="photos-dialog-head"><h2 id="photos-dialog-title"></h2><button type="button" id="photos-close" class="secondary">Close</button></div><div id="photos-dialog-body"></div></dialog>
+</section>
+<section id="band-admin-panel" hidden>
+<div class="band-heading"><h2>BAND Integration</h2><button type="button" id="band-refresh">Sync Events from BAND</button></div>
+<p>Upcoming events are imported from the private BAND calendar subscription. The subscription URL is stored securely in Supabase and is not displayed here.</p>
+<p id="band-admin-status" class="status" role="status" aria-live="polite"></p>
+<p id="band-admin-synced" class="small band-synced"></p>
+<div id="band-admin-events" class="band-events"></div>
+<p class="small">Manual synchronization is enabled for initial testing. BAND remains the source for event details and RSVPs.</p>
 </section>
 <section id="troop-calendar-panel" hidden>
 <div class="troop-calendar-heading"><h2>Troop Calendar</h2><button type="button" id="troop-calendar-refresh" hidden>Sync Calendar from Google Drive</button></div>
@@ -183,6 +197,6 @@
 </section>
 <aside class="notice"><strong>Testing only</strong><p>Do not enter or import actual Scout information. This preview is not ready for production use.</p></aside>
 </main>
-<footer>Troop 120 Toolbox &middot; Application preview 0.42</footer>
+<footer>Troop 120 Toolbox &middot; Application preview 0.43</footer>
 </body>
 </html>
