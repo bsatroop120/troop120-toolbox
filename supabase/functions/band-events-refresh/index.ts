@@ -46,6 +46,11 @@ async function readFeed(){
   }finally{await reader.cancel().catch(()=>{});}
   return {body,token};
 }
+function bandEventUrl(uid){
+  if(typeof uid!=="string")return null;
+  const match=uid.match(/^(4\/89924015\/[0-9]{1,20}\/[0-9]{8})@band\.us$/);
+  return match?"https://band.us/band/89924015/schedule/"+encodeURIComponent(match[1]):null;
+}
 function parseFeed(body,token,now=Date.now()){
   if(!body.trimStart().startsWith("BEGIN:VCALENDAR")||!body.trimEnd().endsWith("END:VCALENDAR"))throw Error("Invalid iCalendar response");
   const calendar=new ICAL.Component(ICAL.parse(body));
@@ -65,7 +70,7 @@ function parseFeed(body,token,now=Date.now()){
     return s.slice(0,max);
   };
   const cancelled=c=>String(c.getFirstPropertyValue("status")||"").toUpperCase()==="CANCELLED";
-  const add=(c,start,end,master=c)=>{
+  const add=(c,start,end,master=c,explicitUid=true)=>{
     if(cancelled(c))return;
     const startProp=c.getFirstProperty("dtstart")||master.getFirstProperty("dtstart");
     const endProp=c.getFirstProperty("dtend")||master.getFirstProperty("dtend")||startProp;
@@ -77,7 +82,8 @@ function parseFeed(body,token,now=Date.now()){
     const uid=String(master.getFirstPropertyValue("uid")||c.getFirstPropertyValue("uid")||"");
     const key=uid+"|"+s+"|"+e+"|"+title;
     if(seen.has(key))return;seen.add(key);
-    events.push({title,location,starts_at:new Date(s).toISOString(),ends_at:new Date(e).toISOString(),all_day:!!start.isDate});
+    const event_url=explicitUid?bandEventUrl(String(c.getFirstPropertyValue("uid")||"")):null;
+    events.push({title,location,starts_at:new Date(s).toISOString(),ends_at:new Date(e).toISOString(),all_day:!!start.isDate,event_url});
     if(events.length>1000)throw Error("Too many upcoming events");
   };
   const masters=new Map(),exceptions=new Map();
@@ -107,12 +113,12 @@ function parseFeed(body,token,now=Date.now()){
         if(++iterations>25000)throw Error("Recurrence expansion exceeds limit");
         if(toMs(occurrence,c.getFirstProperty("dtstart"))>horizon)break;
         const details=ev.getOccurrenceDetails(occurrence);
-        if(details.item===ev)add(c,details.startDate,details.endDate);
+        if(details.item===ev)add(c,details.startDate,details.endDate,c,false);
       }
       for(const x of overrides){
         if(cancelled(x))continue;
         const override=new ICAL.Event(x,{exceptions:[]});
-        add(x,override.startDate,override.endDate,c);
+        add(x,override.startDate,override.endDate,c,false);
       }
     }else{
       if(overrides.length)throw Error("Unexpected recurrence override");
@@ -123,7 +129,7 @@ function parseFeed(body,token,now=Date.now()){
     for(const c of items){
       if(cancelled(c))continue;
       const ev=new ICAL.Event(c,{exceptions:[]});
-      add(c,ev.startDate,ev.endDate);
+      add(c,ev.startDate,ev.endDate,c,false);
     }
   }
   return events.sort((a,b)=>a.starts_at.localeCompare(b.starts_at)||a.title.localeCompare(b.title));
