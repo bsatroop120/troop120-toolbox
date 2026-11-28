@@ -7,16 +7,19 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; connect-src https://vionsmadqxigjmygqtoe.supabase.co; img-src 'self' https://lh3.googleusercontent.com https://lh4.googleusercontent.com https://lh5.googleusercontent.com https://lh6.googleusercontent.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="color-scheme" content="light">
 <title>Troop 120 Toolbox</title>
-<link rel="stylesheet" href="./styles-v55.css">
+<link rel="stylesheet" href="./styles-v57.css">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
 <script defer src="./albums-v15.js"></script>
 <script defer src="./album-covers-v17.js"></script>
-<script defer src="./app-v56.js"></script>
+<script defer src="./app-v57.js"></script>
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
 <button type="button" id="brand-home" class="unit-brand" aria-label="Troop 120 Toolbox Home" disabled><span class="unit-mark" aria-hidden="true">120</span><span class="unit-brand-copy"><strong>Troop 120 Toolbox</strong><span class="unit-brand-subtitle">Troop 120 &ndash; Seneca, SC</span></span></button>
-<nav id="family-navigation" class="family-navigation" aria-label="Personal and family tools" hidden></nav>
+<section id="announcement-banner" class="announcement-banner" aria-label="Troop announcements" hidden>
+<div class="announcement-header"><strong>Announcements</strong><div id="announcement-controls" class="announcement-controls" hidden><span id="announcement-position" aria-hidden="true"></span><button type="button" id="announcement-prev" aria-label="Previous announcement" title="Previous announcement">&#8249;</button><button type="button" id="announcement-pause" aria-label="Pause announcement rotation" title="Pause announcement rotation">Pause</button><button type="button" id="announcement-next" aria-label="Next announcement" title="Next announcement">&#8250;</button></div></div>
+<div id="announcement-display" class="announcement-display" aria-live="off"><p>No announcements at this time.</p></div>
+</section>
 <span id="preview-tag" class="tag">Development preview</span>
 <div id="account-control" class="account-control" hidden>
 <button id="account-toggle" type="button" aria-expanded="false" aria-controls="account-menu"><span class="avatar"><img id="google-avatar" alt="" hidden><span id="avatar-initial">?</span></span><span id="google-name">Your account</span><span aria-hidden="true">&#9662;</span></button>
@@ -100,6 +103,17 @@
 <div id="photos-gallery" class="photos-gallery"></div>
 <button id="photos-more" type="button" class="secondary" hidden>Show more albums</button>
 <dialog id="photos-dialog" aria-labelledby="photos-dialog-title"><div class="photos-dialog-head"><h2 id="photos-dialog-title"></h2><button type="button" id="photos-close" class="secondary">Close</button></div><div id="photos-dialog-body"></div></dialog>
+</section>
+<section id="announcements-admin-panel" hidden>
+<h2>Announcements</h2>
+<p>Publish short troop-wide messages in the scrolling header. Only authorized troop members can see them.</p>
+<form id="announcement-form">
+<div class="field"><label for="announcement-text">New announcement</label><textarea id="announcement-text" rows="3" maxlength="240" required placeholder="Type your announcement here..." disabled></textarea></div>
+<div class="announcement-form-actions"><button type="submit" id="announcement-add" disabled>Add</button><span class="small" id="announcement-length">0 / 240 characters</span></div>
+</form>
+<p id="announcement-admin-status" class="status" role="status" aria-live="polite"></p>
+<section class="announcement-list-box" aria-labelledby="announcement-list-heading"><h3 id="announcement-list-heading">Current Announcements</h3><div id="announcement-admin-list"></div></section>
+<p class="small">Newest announcements appear first and rotate automatically. Remove notices when they are no longer needed. Limit: 30 active announcements. Do not include private Scout or family information.</p>
 </section>
 <section id="band-admin-panel" hidden>
 <div class="band-heading"><h2>BAND Integration</h2><button type="button" id="band-refresh">Sync Events from BAND</button></div>
@@ -195,6 +209,6 @@
 </section>
 <aside class="notice"><strong>Testing only</strong><p>Do not enter or import actual Scout information. This preview is not ready for production use.</p></aside>
 </main>
-<footer>Troop 120 Toolbox &middot; Application preview 0.56</footer>
+<footer>Troop 120 Toolbox &middot; Application preview 0.57</footer>
 </body>
 </html>
