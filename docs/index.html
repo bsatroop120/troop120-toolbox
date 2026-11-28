@@ -7,11 +7,11 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; connect-src https://vionsmadqxigjmygqtoe.supabase.co; img-src 'self' https://lh3.googleusercontent.com https://lh4.googleusercontent.com https://lh5.googleusercontent.com https://lh6.googleusercontent.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="color-scheme" content="light">
 <title>Troop 120 Toolbox</title>
-<link rel="stylesheet" href="./styles-v28.css">
+<link rel="stylesheet" href="./styles-v29.css">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
 <script defer src="./albums-v15.js"></script>
 <script defer src="./album-covers-v17.js"></script>
-<script defer src="./app-v28.js"></script>
+<script defer src="./app-v29.js"></script>
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
@@ -42,8 +42,10 @@
 </section>
 <section id="workspace" class="workspace-grid" hidden>
 <aside class="sidebar" id="troop-sidebar" hidden>
-<p class="eyebrow">Troop tools</p>
+<p class="eyebrow" id="sidebar-heading">Troop tools</p>
 <nav id="navigation" aria-label="Troop tools"></nav>
+<nav id="admin-navigation" aria-label="Administration" hidden></nav>
+<button id="admin-back" type="button" class="sidebar-back" hidden>Back to Troop Tools</button>
 <div class="sidebar-landscape" aria-hidden="true"></div>
 </aside>
 <div class="panel">
@@ -104,7 +106,6 @@
 <div class="module planned-module"><span class="badge">Planned &middot; not available yet</span><h3>Coming to the Toolbox</h3><p id="planned-description"></p><p class="small">This preview is a navigation placeholder. No information is being imported or saved by this module.</p></div>
 </section>
 <section id="admin-panel" hidden>
-<p class="eyebrow">Administration</p>
 <div class="directory-header">
 <div><h2>Accounts &amp; members</h2><p>Manage accounts, membership records and family relationships in one place.</p></div>
 <button type="button" id="admin-refresh" class="secondary">Refresh</button>
@@ -154,6 +155,6 @@
 </section>
 <aside class="notice"><strong>Testing only</strong><p>Do not enter or import actual Scout information. This preview is not ready for production use.</p></aside>
 </main>
-<footer>Troop 120 Toolbox &middot; Application preview 0.28</footer>
+<footer>Troop 120 Toolbox &middot; Application preview 0.29</footer>
 </body>
 </html>
