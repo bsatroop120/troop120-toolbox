@@ -7,11 +7,11 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; connect-src https://vionsmadqxigjmygqtoe.supabase.co; img-src 'self' https://lh3.googleusercontent.com https://lh4.googleusercontent.com https://lh5.googleusercontent.com https://lh6.googleusercontent.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="color-scheme" content="light">
 <title>Troop 120 Toolbox</title>
-<link rel="stylesheet" href="./styles-v29.css">
+<link rel="stylesheet" href="./styles-v32.css">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
 <script defer src="./albums-v15.js"></script>
 <script defer src="./album-covers-v17.js"></script>
-<script defer src="./app-v31.js"></script>
+<script defer src="./app-v32.js"></script>
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
@@ -101,6 +101,16 @@
 <button id="photos-more" type="button" class="secondary" hidden>Show more albums</button>
 <dialog id="photos-dialog" aria-labelledby="photos-dialog-title"><div class="photos-dialog-head"><h2 id="photos-dialog-title"></h2><button type="button" id="photos-close" class="secondary">Close</button></div><div id="photos-dialog-body"></div></dialog>
 </section>
+<section id="bylaws-panel" hidden>
+<div class="bylaws-heading"><h2>Troop Bylaws</h2><div class="bylaws-actions"><a id="bylaws-source" class="bylaws-source" target="_blank" rel="noopener noreferrer" hidden>Open in Google Docs</a><button type="button" id="bylaws-refresh" hidden>Update Bylaws</button></div></div>
+<p id="bylaws-version" class="small"></p>
+<p id="bylaws-status" class="status" role="status" aria-live="polite"></p>
+<div id="bylaws-reader" hidden>
+<div class="field bylaws-search"><label for="bylaws-search">Search bylaws</label><input type="search" id="bylaws-search" placeholder="Search by topic, keyword or section number"></div>
+<p id="bylaws-count" class="small" role="status" aria-live="polite"></p>
+<div class="bylaws-layout"><nav id="bylaws-toc" aria-label="Bylaws table of contents"></nav><article id="bylaws-content" aria-label="Bylaws text"></article></div>
+</div>
+</section>
 <section id="planned-panel" hidden>
 <p id="planned-category" class="eyebrow"></p><h2 id="planned-title"></h2>
 <div class="module planned-module"><span class="badge">Planned &middot; not available yet</span><h3>Coming to the Toolbox</h3><p id="planned-description"></p><p class="small">This preview is a navigation placeholder. No information is being imported or saved by this module.</p></div>
@@ -155,6 +165,6 @@
 </section>
 <aside class="notice"><strong>Testing only</strong><p>Do not enter or import actual Scout information. This preview is not ready for production use.</p></aside>
 </main>
-<footer>Troop 120 Toolbox &middot; Application preview 0.31</footer>
+<footer>Troop 120 Toolbox &middot; Application preview 0.32</footer>
 </body>
 </html>
