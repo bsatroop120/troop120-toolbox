@@ -8,11 +8,11 @@
 <meta name="color-scheme" content="light">
 <title>Troop 120 Toolbox</title>
 <link rel="icon" type="image/svg+xml" sizes="any" href="./favicon-v60.svg">
-<link rel="stylesheet" href="./styles-v58.css">
+<link rel="stylesheet" href="./styles-v61.css">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
 <script defer src="./albums-v15.js"></script>
 <script defer src="./album-covers-v17.js"></script>
-<script defer src="./app-v59.js"></script>
+<script defer src="./app-v61.js"></script>
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
@@ -104,6 +104,12 @@
 <div id="photos-gallery" class="photos-gallery"></div>
 <button id="photos-more" type="button" class="secondary" hidden>Show more albums</button>
 <dialog id="photos-dialog" aria-labelledby="photos-dialog-title"><div class="photos-dialog-head"><h2 id="photos-dialog-title"></h2><button type="button" id="photos-close" class="secondary">Close</button></div><div id="photos-dialog-body"></div></dialog>
+</section>
+<section id="eagles-panel" hidden>
+<div class="eagle-honor-banner"><svg class="eagle-emblem" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 18c-5-6-14-9-27-10 3 11 9 18 16 21l-7 5 14 2 4 8 4-8 14-2-7-5c7-3 13-10 16-21-13 1-22 4-27 10z" fill="currentColor"/><path d="M32 20l5 5-5 5-5-5z" fill="#fff4cf"/><path d="M22 49h20M27 54h10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><div><p class="eyebrow">Troop 120 &middot; Honor roll</p><h2>Eagles Nest</h2><p>Recognizing the Scouts who achieved Scouting's highest rank with Troop 120.</p></div></div>
+<div class="eagle-toolbar"><h3>Troop 120 Eagle Scouts</h3><label class="eagle-search-label" for="eagle-search">Search names <input id="eagle-search" type="search" maxlength="160" placeholder="Find an Eagle Scout" disabled></label></div>
+<p id="eagle-status" class="status" role="status" aria-live="polite"></p>
+<div id="eagle-list" class="eagle-list"></div>
 </section>
 <section id="announcements-admin-panel" hidden>
 <h2>Announcements</h2>
@@ -205,6 +211,6 @@
 </section>
 <aside class="notice"><strong>Testing only</strong><p>Do not enter or import actual Scout information. This preview is not ready for production use.</p></aside>
 </main>
-<footer>Troop 120 Toolbox &middot; Application preview 0.60</footer>
+<footer>Troop 120 Toolbox &middot; Application preview 0.61</footer>
 </body>
 </html>
