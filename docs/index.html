@@ -8,11 +8,11 @@
 <meta name="color-scheme" content="light">
 <title>Troop 120 Toolbox</title>
 <link rel="icon" type="image/svg+xml" sizes="any" href="./favicon-v60.svg">
-<link rel="stylesheet" href="./styles-v65.css">
+<link rel="stylesheet" href="./styles-v66.css">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
 <script defer src="./albums-v15.js"></script>
 <script defer src="./album-covers-v17.js"></script>
-<script defer src="./app-v64.js"></script>
+<script defer src="./app-v66.js"></script>
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
@@ -104,6 +104,27 @@
 <div id="photos-gallery" class="photos-gallery"></div>
 <button id="photos-more" type="button" class="secondary" hidden>Show more albums</button>
 <dialog id="photos-dialog" aria-labelledby="photos-dialog-title"><div class="photos-dialog-head"><h2 id="photos-dialog-title"></h2><button type="button" id="photos-close" class="secondary">Close</button></div><div id="photos-dialog-body"></div></dialog>
+</section>
+<section id="leadership-reports-panel" hidden>
+<h2>Leadership Reports</h2>
+<p>Leadership updates for the Assistant Senior Patrol Leader (ASPL).</p>
+<div class="leadership-preview-note"><strong>Development preview</strong><p>Adult administrator testing only. Use fictional reports and sample positions, not actual Scout names or personal information. Reports are not delivered to Scouts or an actual ASPL yet.</p></div>
+<div id="leadership-workspace" hidden>
+<div class="leadership-filter"><label for="leadership-week">Reporting week beginning Monday</label><input id="leadership-week" type="date" min="2020-01-01"><button id="leadership-refresh" type="button" class="secondary">Refresh</button></div>
+<nav class="leadership-tabs" aria-label="Leadership report views"><button id="leadership-tab-submit" type="button" data-view="submit" aria-current="page">Submit Report</button><button id="leadership-tab-mine" type="button" data-view="mine">My Reports</button><button id="leadership-tab-received" type="button" data-view="received">Reports Received</button><button id="leadership-tab-pending" type="button" data-view="pending">Pending Reports</button><button id="leadership-tab-followup" type="button" data-view="followup">Follow-Up Items</button></nav>
+<p id="leadership-status" class="status" role="status" aria-live="polite"></p>
+<section id="leadership-submit">
+<h3>Submit a test leadership report</h3>
+<form id="leadership-form">
+<div class="field"><label for="leadership-position">Sample leadership position</label><select id="leadership-position" required><option value="">Select a position</option><option value="quartermaster">Quartermaster</option><option value="scribe">Scribe</option><option value="historian">Historian</option><option value="librarian">Librarian</option><option value="chaplain-aide">Chaplain's Aide</option><option value="instructor">Instructor</option><option value="troop-guide">Troop Guide</option><option value="den-chief">Den Chief</option><option value="outdoor-ethics">Outdoor Ethics Guide</option><option value="webmaster">Webmaster</option><option value="bugler">Bugler</option><option value="oa-representative">OA Representative</option></select></div>
+<div class="field"><label for="leadership-completed">What did you accomplish?</label><textarea id="leadership-completed" rows="4" maxlength="1500" required placeholder="Fictional responsibilities completed this week"></textarea></div>
+<div class="field"><label for="leadership-planned">What are you planning next?</label><textarea id="leadership-planned" rows="3" maxlength="1500"></textarea></div>
+<div class="field"><label for="leadership-assistance">Issues or help needed from the ASPL</label><textarea id="leadership-assistance" rows="3" maxlength="1000"></textarea></div>
+<button id="leadership-send" type="submit" disabled>Submit Test Report</button>
+</form>
+</section>
+<section id="leadership-results" hidden><h3 id="leadership-results-title"></h3><div id="leadership-mine-filter" class="field" hidden><label for="leadership-mine-position">Simulate reports from this position</label><select id="leadership-mine-position"><option value="">Choose a position</option><option value="quartermaster">Quartermaster</option><option value="scribe">Scribe</option><option value="historian">Historian</option><option value="librarian">Librarian</option><option value="chaplain-aide">Chaplain's Aide</option><option value="instructor">Instructor</option><option value="troop-guide">Troop Guide</option><option value="den-chief">Den Chief</option><option value="outdoor-ethics">Outdoor Ethics Guide</option><option value="webmaster">Webmaster</option><option value="bugler">Bugler</option><option value="oa-representative">OA Representative</option></select></div><p id="leadership-results-note" class="small"></p><div id="leadership-report-list"></div></section>
+</div>
 </section>
 <section id="eagles-panel" hidden>
 <div class="eagle-honor-banner"><img class="eagle-emblem" src="./eagle-medal.png" alt="" width="36" height="84"><div><p class="eyebrow">Troop 120 &middot; Honor roll</p><h2>Eagles Nest</h2><p>Recognizing the Scouts who achieved Scouting's highest rank with Troop 120.</p></div></div>
@@ -229,6 +250,6 @@
 </section>
 <aside class="notice"><strong>Testing only</strong><p>Do not enter or import actual Scout information. This preview is not ready for production use.</p></aside>
 </main>
-<footer>Troop 120 Toolbox &middot; Application preview 0.65</footer>
+<footer>Troop 120 Toolbox &middot; Application preview 0.66</footer>
 </body>
 </html>
