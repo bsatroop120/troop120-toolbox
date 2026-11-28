@@ -106,7 +106,7 @@ begin
  perform public.remove_toolbox_album(v_unit,v_id,v_new_updated);
  if exists(select 1 from public.toolbox_albums where id=v_id) then raise exception 'FAIL: removal did not persist'; end if;
  if not exists(select 1 from public.audit_logs where action='album.removed' and entity_id=v_id) then raise exception 'FAIL: removal audit missing'; end if;
-end $;
+end $$;
 reset role;
 rollback;
 select 'PASS: admin-only album edit and removal, read permissions, unit isolation, stale-write protection and audit' as result;
