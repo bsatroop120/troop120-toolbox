@@ -1,0 +1,59 @@
+name: Probe Google Photos album date metadata
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/test-album-dates.yml']
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect date fields only
+        run: |
+          python3 - <<'PY'
+          import json,re,urllib.request,datetime
+          from pathlib import Path
+          from html.parser import HTMLParser
+          class Parser(HTMLParser):
+              def __init__(self):
+                  super().__init__(convert_charrefs=True);self.meta={};self.text=[];self.script=False
+              def handle_starttag(self,tag,attrs):
+                  if tag=='script' or tag=='style':self.script=True
+                  if tag=='meta':
+                      a=dict(attrs);k=a.get('property') or a.get('name') or a.get('itemprop')
+                      if k:self.meta[k]=a.get('content','')
+              def handle_endtag(self,tag):
+                  if tag in ('script','style'):self.script=False
+              def handle_data(self,data):
+                  if not self.script and data.strip():self.text.append(data.strip())
+          def shape(data, path='',depth=0):
+              if isinstance(data,list):
+                  if depth>4:return
+                  if len(data)>12:
+                      print('array',path,'length',len(data))
+                  for i,v in enumerate(data[:10]):
+                      if isinstance(v,list):
+                          print('array',path+'['+str(i)+']','length',len(v))
+                          if len(data)>12 and i>0:break
+                          shape(v,path+'['+str(i)+']',depth+1)
+                      elif type(v) is int and 946684800000<=v<=4102444800000:
+                          print('timestamp',path+'['+str(i)+']',datetime.datetime.fromtimestamp(v/1000,datetime.timezone.utc).isoformat())
+          albums=json.loads(Path('docs/albums-v15.js').read_text().split('window.TROOP_PUBLIC_ALBUMS = ',1)[1].strip().rstrip(';'))
+          for album in [albums[0],albums[1],albums[14],albums[55]]:
+              print('Expected event month:',album['date'])
+              req=urllib.request.Request(album['url'],headers={'User-Agent':'Troop120Toolbox-DateTest/1.0','Accept-Language':'en-US,en;q=0.9'})
+              with urllib.request.urlopen(req,timeout=20) as r:html=r.read(5_000_000).decode('utf8','replace')
+              p=Parser();p.feed(html)
+              print('Metadata keys:',','.join(p.meta))
+              for t in p.text:
+                  if len(t)<=100 and re.fullmatch(r'[\d\s,–—/\-A-Za-z.]+',t) and re.search(r'\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\b',t,re.I) and re.search(r'\b20\d{2}\b',t):
+                      if re.fullmatch(r'(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*[\d\s,–—/\-A-Za-z.]+',t,re.I):print('Date-like text:',t)
+              for match in re.finditer(r"AF_initDataCallback\(\{key:\s*['\"]ds:(\d+)['\"][\s\S]*?data:\s*",html):
+                  try:data,_=json.JSONDecoder().raw_decode(html[match.end():])
+                  except ValueError:continue
+                  print('Dataset',match.group(1));shape(data)
+          PY
