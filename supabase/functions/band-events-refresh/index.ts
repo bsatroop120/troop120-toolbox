@@ -133,32 +133,41 @@ Deno.serve(async req=>{
   if(req.method!=="POST")return reply({error:"Method not allowed"},405);
   const bearer=req.headers.get("Authorization");
   if(!bearer?.startsWith("Bearer "))return reply({error:"Sign-in required"},401);
-  let unit;
+  let unit,mode;
   try{
     const raw=await req.text();if(raw.length>1024)return reply({error:"Request too large"},413);
-    unit=JSON.parse(raw).unit_id;
-    if(typeof unit!=="string"||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(unit))throw Error();
+    const input=JSON.parse(raw);unit=input.unit_id;mode=input.mode??"force";
+    if(typeof unit!=="string"||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(unit)||!["auto","force"].includes(mode))throw Error();
   }catch{return reply({error:"Invalid request"},400);}
   const api=Deno.env.get("SUPABASE_URL"),anon=Deno.env.get("SUPABASE_ANON_KEY"),service=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
   if(!api||!anon||!service)return reply({error:"Refresh not configured"},503);
   const caller={Authorization:bearer,apikey:anon,"Content-Type":"application/json"};
+  const server={Authorization:"Bearer "+service,apikey:service,"Content-Type":"application/json"};
+  const rpc=(name,body)=>safeFetch(api+"/rest/v1/rpc/"+name,{method:"POST",headers:server,body:JSON.stringify(body)});
+  const force=mode==="force";
+  let actor,lease;
+  const finish=async events=>rpc("finish_toolbox_band_refresh",{p_unit_id:unit,p_actor_id:actor,p_lease_id:lease,p_force:force,p_events:events});
   try{
     const user=await safeFetch(api+"/auth/v1/user",{headers:caller});
     if(!user.ok)return reply({error:"Sign-in required"},401);
-    const actor=(await user.json()).id;
+    actor=(await user.json()).id;
     if(typeof actor!=="string")return reply({error:"Sign-in required"},401);
-    const allowed=await safeFetch(api+"/rest/v1/rpc/can_refresh_toolbox_band_events",{method:"POST",headers:caller,body:JSON.stringify({p_unit_id:unit})});
-    if(!allowed.ok||await allowed.json()!==true)return reply({error:"Administrator access required"},403);
-    const current=await safeFetch(api+"/rest/v1/toolbox_band_events?select=refreshed_at&unit_id=eq."+encodeURIComponent(unit),{headers:caller});
-    if(!current.ok)return reply({error:"Events storage unavailable"},503);
-    const rows=await current.json();
-    if(!Array.isArray(rows)||rows.length>1)return reply({error:"Events storage unavailable"},503);
+    const claimed=await rpc("claim_toolbox_band_refresh",{p_unit_id:unit,p_actor_id:actor,p_force:force});
+    if(!claimed.ok)return reply({error:"Refresh coordination unavailable"},503);
+    const state=await claimed.json();
+    if(state.status==="denied")return reply({error:force?"Administrator access required":"Troop membership required"},403);
+    if(["cached","busy","backoff"].includes(state.status))return reply({status:state.status,refreshed_at:state.refreshed_at??null});
+    if(state.status!=="claimed"||typeof state.lease_id!=="string")return reply({error:"Refresh coordination unavailable"},503);
+    lease=state.lease_id;
     let feed;
     try{feed=await readFeed();}catch{return reply({error:"Unable to retrieve the BAND calendar. Check the subscription URL in Supabase Secrets."},502);}
     let events;
     try{events=parseFeed(feed.body,feed.token);}catch{return reply({error:"BAND calendar format could not be fully imported. The previous snapshot is retained."},422);}
-    const saved=await safeFetch(api+"/rest/v1/rpc/save_toolbox_band_events_snapshot",{method:"POST",headers:{Authorization:"Bearer "+service,apikey:service,"Content-Type":"application/json"},body:JSON.stringify({p_unit_id:unit,p_actor_id:actor,p_events:events,p_expected_refreshed_at:rows[0]?.refreshed_at??null})});
+    const saved=await finish(events);
     if(!saved.ok)return reply({error:"Unable to save events. The previous snapshot is retained."},409);
-    return reply({refreshed_at:await saved.json(),event_count:events.length});
+    const refreshed=await saved.json();lease=null;
+    if(!refreshed)return reply({error:"Troop membership changed during sync."},403);
+    return reply({status:"updated",refreshed_at:refreshed,event_count:events.length});
   }catch{return reply({error:"BAND synchronization unavailable."},502);}
+  finally{if(lease)try{await finish(null);}catch{/* Lease expires automatically; never expose credentials or errors. */}}
 });
