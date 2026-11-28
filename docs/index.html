@@ -8,11 +8,11 @@
 <meta name="color-scheme" content="light">
 <title>Troop 120 Toolbox</title>
 <link rel="icon" type="image/svg+xml" sizes="any" href="./favicon-v60.svg">
-<link rel="stylesheet" href="./styles-v63.css">
+<link rel="stylesheet" href="./styles-v64.css">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
 <script defer src="./albums-v15.js"></script>
 <script defer src="./album-covers-v17.js"></script>
-<script defer src="./app-v63.js"></script>
+<script defer src="./app-v64.js"></script>
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
@@ -110,6 +110,24 @@
 <div class="eagle-toolbar"><h3>Troop 120 Eagle Scouts</h3><label class="eagle-search-label" for="eagle-search">Search names <input id="eagle-search" type="search" maxlength="160" placeholder="Find an Eagle Scout" disabled></label></div>
 <p id="eagle-status" class="status" role="status" aria-live="polite"></p>
 <div id="eagle-list" class="eagle-list"></div>
+</section>
+<section id="eagle-admin-panel" hidden>
+<h2>Eagle Honor Roll</h2>
+<p>Add an Eagle Scout or correct an existing name or advancement date. Changes appear in Eagles Nest for authorized troop members.</p>
+<div class="eagle-admin-box">
+<h3 id="eagle-admin-form-heading">Add Eagle Scout</h3>
+<form id="eagle-admin-form">
+<div class="eagle-admin-fields">
+<div class="field"><label for="eagle-admin-name">Full name</label><input id="eagle-admin-name" maxlength="160" required autocomplete="off" disabled></div>
+<div class="field"><label for="eagle-admin-date">Date earned</label><input type="date" id="eagle-admin-date" min="1912-01-01" required disabled></div>
+</div>
+<div class="eagle-admin-actions"><button type="submit" id="eagle-admin-save" disabled>Add Eagle Scout</button><button type="button" id="eagle-admin-cancel" class="secondary" hidden>Cancel Edit</button></div>
+</form>
+<p id="eagle-admin-status" class="status" role="status" aria-live="polite"></p>
+</div>
+<div class="eagle-toolbar"><h3>Current Honor Roll</h3><label class="eagle-search-label" for="eagle-admin-search">Search names <input type="search" id="eagle-admin-search" maxlength="160" placeholder="Find an Eagle Scout" disabled></label><button type="button" id="eagle-admin-reload" class="secondary" disabled>Refresh</button></div>
+<p id="eagle-admin-count" class="small" role="status"></p>
+<div id="eagle-admin-list" class="eagle-admin-list"></div>
 </section>
 <section id="announcements-admin-panel" hidden>
 <h2>Announcements</h2>
@@ -211,6 +229,6 @@
 </section>
 <aside class="notice"><strong>Testing only</strong><p>Do not enter or import actual Scout information. This preview is not ready for production use.</p></aside>
 </main>
-<footer>Troop 120 Toolbox &middot; Application preview 0.63</footer>
+<footer>Troop 120 Toolbox &middot; Application preview 0.64</footer>
 </body>
 </html>
