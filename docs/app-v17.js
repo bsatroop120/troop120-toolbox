@@ -222,7 +222,7 @@ async function start() {
   let photosLimit=24;
   let photosView="grid";
   const photoFields=["photos-search","photos-year","photos-category","photos-sort"];
-  const albumCategories=[...new Set(publicAlbums.map(a=>a.category).concat(["Special Events"]))].sort();
+  const albumCategories=["Camping","Courts of Honor","Community Service","Summer Camp","Camporees","High Adventure","Special Events","Troop Meetings","Eagle Projects","Fundraising","Crossovers","Hiking & Backpacking","Water Activities","Winter Activities","Training & Skills"].sort();
   const approvedAlbumURL=/^https:\/\/(?:photos\.app\.goo\.gl\/[A-Za-z0-9_-]+|goo\.gl\/photos\/[A-Za-z0-9_-]+|photos\.google\.com\/share\/[A-Za-z0-9_-]+(?:\?key=[A-Za-z0-9_-]+)?)$/;
   const approvedCoverURL=/^https:\/\/lh[3-6]\.googleusercontent\.com\/[^\s]+$/;
   function refreshPhotoOptions(){
@@ -322,7 +322,7 @@ async function start() {
   el("photos-add").addEventListener("click",()=>{
     if(!photosCanAdd||!photosBackend||!photosUnit||el("photos-panel").hidden||!allowedPanels.has("photos-panel"))return;
     const unit=photosUnit,ticket=generation;
-    const valid=()=>ticket===generation&&unit===photosUnit&&photosCanAdd&&el("photos-dialog").open;
+    const valid=()=>ticket===generation&&unit===photosUnit&&photosCanAdd&&el("photos-dialog").open&&body.contains(form);
     el("photos-dialog-title").textContent="Add Album";
     const body=el("photos-dialog-body");body.replaceChildren();
     const note=document.createElement("p");note.textContent="Paste a Google Photos shared album link. Look up its title and cover, then review the details before adding it.";
