@@ -56,7 +56,24 @@ function parseCalendar(rows: unknown[][]) {
   const notes=[cell(62,2),cell(63,2)].filter(Boolean);
   return {title,months,notes};
 }
-async function readCalendar(id:string,token:string){
+function parseSource(value: unknown) {
+  if(typeof value!=="string"||value.length>2048)throw Error("Invalid Google Sheets URL");
+  const m=value.trim().match(/^https:\/\/docs\.google\.com\/spreadsheets\/d\/([A-Za-z0-9_-]{10,200})(?:\/(?:edit|view))?\/?(?:\?([^#\s]*))?(?:#([^\s]*))?$/);
+  if(!m)throw Error("Use a Google Sheets share link");
+  const gids=[];
+  for(const part of [m[2]||"",m[3]||""]){
+    for(const pair of part.split("&")){
+      if(pair==="gid"||pair.startsWith("gid=")){
+        const v=pair.slice(4);
+        if(!/^\d{1,10}$/.test(v)||Number(v)>2147483647)throw Error("Invalid sheet tab");
+        gids.push(Number(v));
+      }
+    }
+  }
+  if(new Set(gids).size>1)throw Error("Conflicting sheet tabs");
+  return {id:m[1],gid:gids.length?gids[0]:null};
+}
+async function readCalendar(id:string,gid:number|null,token:string){
   const base="https://www.googleapis.com/drive/v3/files/"+encodeURIComponent(id),headers={Authorization:"Bearer "+token};
   const meta=async()=>{
     const r=await safeFetch(base+"?fields=id,mimeType,modifiedTime,version,trashed",{headers});
@@ -68,9 +85,10 @@ async function readCalendar(id:string,token:string){
   const before=await meta(),api="https://sheets.googleapis.com/v4/spreadsheets/"+encodeURIComponent(id);
   const book=await safeFetch(api+"?fields=spreadsheetId,sheets(properties(sheetId,title,hidden))",{headers});
   if(!book.ok)throw Error("Google Sheets API unavailable");
-  const info=await book.json(),tabs=info.sheets?.filter((s:any)=>s.properties?.sheetId===1773699072&&!s.properties?.hidden);
-  if(info.spreadsheetId!==id||tabs?.length!==1||tabs[0].properties.title!=="Troop Calendar")throw Error("Calendar tab changed");
-  const range=encodeURIComponent("'Troop Calendar'!B7:V63");
+  const info=await book.json(),tabs=info.sheets?.filter((s:any)=>!s.properties?.hidden&&(gid===null?s.properties?.title==="Troop Calendar":s.properties?.sheetId===gid));
+  if(info.spreadsheetId!==id||tabs?.length!==1||typeof tabs[0].properties.title!=="string"||!Number.isInteger(tabs[0].properties.sheetId))throw Error("Calendar tab not found; include its gid in the URL");
+  const tab=tabs[0].properties;
+  const range=encodeURIComponent("'"+tab.title.replace(/'/g,"''")+"'!B7:V63");
   const response=await safeFetch(api+"/values/"+range+"?valueRenderOption=FORMATTED_VALUE&majorDimension=ROWS",{headers});
   if(!response.ok)throw Error("Calendar range inaccessible");
   const data=await response.json();
@@ -78,17 +96,20 @@ async function readCalendar(id:string,token:string){
   const calendar=parseCalendar(data.values);
   const after=await meta();
   if(before.version!==after.version||before.modifiedTime!==after.modifiedTime)throw Error("Calendar changed during refresh");
-  return {title:calendar.title,calendar,source_modified_at:after.modifiedTime,source_url:"https://docs.google.com/spreadsheets/d/"+id+"/edit?gid=1773699072"};
+  return {title:calendar.title,calendar,source_modified_at:after.modifiedTime,source_url:"https://docs.google.com/spreadsheets/d/"+id+"/edit?gid="+tab.sheetId};
 }
 Deno.serve(async req=>{
   if(req.method==="OPTIONS")return new Response(null,{status:204,headers:cors});
   if(req.method!=="POST")return reply({error:"Method not allowed"},405);
   const bearer=req.headers.get("Authorization");
   if(!bearer?.startsWith("Bearer "))return reply({error:"Sign-in required"},401);
-  let unit:string;
+  let unit:string,mode:string,candidate:unknown;
   try{
-    const raw=await req.text();if(raw.length>1024)return reply({error:"Request too large"},413);
-    unit=JSON.parse(raw).unit_id;
+    const raw=await req.text();if(raw.length>4096)return reply({error:"Request too large"},413);
+    const input=JSON.parse(raw);unit=input.unit_id;mode=input.mode??"refresh";candidate=input.source_url;
+    if(!["refresh","test","replace"].includes(mode))throw Error("Invalid operation");
+    if(mode!=="refresh")parseSource(candidate);
+    else if(candidate!==undefined)throw Error("Refresh uses the saved source");
     if(typeof unit!=="string"||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(unit))throw Error("Invalid unit");
   }catch{return reply({error:"Invalid request"},400);}
   const api=Deno.env.get("SUPABASE_URL"),anon=Deno.env.get("SUPABASE_ANON_KEY"),service=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
@@ -101,11 +122,23 @@ Deno.serve(async req=>{
     if(typeof actor!=="string")return reply({error:"Sign-in required"},401);
     const allowed=await safeFetch(api+"/rest/v1/rpc/can_refresh_toolbox_troop_calendar",{method:"POST",headers:caller,body:JSON.stringify({p_unit_id:unit})});
     if(!allowed.ok||await allowed.json()!==true)return reply({error:"Administrator access required"},403);
-    const account=Deno.env.get("BYLAWS_GOOGLE_SERVICE_ACCOUNT"),doc=Deno.env.get("TROOP_CALENDAR_SPREADSHEET_ID");
-    if(!account||doc!=="1amGkTN84g7XpDmaSBEl7--fgUPQX2xeXerpCdC_msas")return reply({error:"Google Sheets calendar connection not configured"},503);
-    const source=await readCalendar(doc,await googleToken(account));
-    const save=await safeFetch(api+"/rest/v1/rpc/save_toolbox_troop_calendar_snapshot",{method:"POST",headers:{Authorization:"Bearer "+service,apikey:service,"Content-Type":"application/json"},body:JSON.stringify({p_unit_id:unit,p_actor_id:actor,p_source_url:source.source_url,p_title:source.title,p_calendar:source.calendar,p_source_modified_at:source.source_modified_at})});
+    const account=Deno.env.get("BYLAWS_GOOGLE_SERVICE_ACCOUNT"),fallback=Deno.env.get("TROOP_CALENDAR_SPREADSHEET_ID");
+    if(!account)return reply({error:"Google service account not configured"},503);
+    const current=await safeFetch(api+"/rest/v1/toolbox_troop_calendar?select=source_url,refreshed_at&unit_id=eq."+encodeURIComponent(unit),{headers:caller});
+    if(!current.ok)return reply({error:"Calendar storage unavailable"},503);
+    const rows=await current.json();
+    if(!Array.isArray(rows)||rows.length>1)throw Error("Invalid current calendar");
+    const existing=rows[0];
+    let target;
+    if(mode==="refresh"){
+      if(existing)target=parseSource(existing.source_url);
+      else if(fallback&&/^[A-Za-z0-9_-]{10,200}$/.test(fallback))target={id:fallback,gid:null};
+      else return reply({error:"Paste the calendar URL and save the source first"},400);
+    }else target=parseSource(candidate);
+    const source=await readCalendar(target.id,target.gid,await googleToken(account));
+    if(mode==="test")return reply({title:source.title,source_url:source.source_url,month_count:source.calendar.months.length});
+    const save=await safeFetch(api+"/rest/v1/rpc/save_toolbox_troop_calendar_snapshot",{method:"POST",headers:{Authorization:"Bearer "+service,apikey:service,"Content-Type":"application/json"},body:JSON.stringify({p_unit_id:unit,p_actor_id:actor,p_source_url:source.source_url,p_title:source.title,p_calendar:source.calendar,p_source_modified_at:source.source_modified_at,p_expected_refreshed_at:existing?.refreshed_at??null})});
     if(!save.ok)return reply({error:"Unable to save the new snapshot. The previous copy is unchanged."},409);
-    return reply({refreshed_at:await save.json()});
+    return reply({refreshed_at:await save.json(),source_url:source.source_url});
   }catch{return reply({error:"Unable to refresh the Google Sheets calendar. Verify its sharing permissions and server configuration. The previous copy is retained."},502);}
 });
