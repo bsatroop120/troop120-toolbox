@@ -2,7 +2,7 @@
 begin;
 do $$
 declare
- v_unit uuid; v_other uuid; v_admin uuid; v_user uuid; v_member uuid;
+ v_unit uuid; v_other uuid; v_admin uuid; v_user uuid; v_member uuid; v_child uuid;
  v_parent uuid:=gen_random_uuid(); v_leader uuid:=gen_random_uuid(); v_pending uuid:=gen_random_uuid();
 begin
  select id into strict v_unit from public.units where slug='troop-120';
@@ -12,10 +12,15 @@ begin
  foreach v_user in array array[v_parent,v_leader,v_pending] loop
    insert into auth.users(id,aud,role,email,email_confirmed_at,created_at,updated_at,raw_app_meta_data,raw_user_meta_data)
    values(v_user,'authenticated','authenticated',v_user::text||'@example.invalid',now(),now(),now(),'{}','{}');
+   insert into public.profiles(id,display_name) values(v_user,'Album Test Account') on conflict(id) do nothing;
    if v_user<>v_pending then
      insert into public.members(unit_id,display_name,member_type) values(v_unit,'Album Test Adult','adult') returning id into v_member;
      insert into public.member_accounts(unit_id,profile_id,member_id) values(v_unit,v_user,v_member);
      insert into public.user_roles(unit_id,profile_id,role_code) values(v_unit,v_user,case when v_user=v_parent then 'parent' else 'leader' end);
+     if v_user=v_parent then
+       insert into public.members(unit_id,display_name,member_type) values(v_unit,'Album Test Scout','youth') returning id into v_child;
+       insert into public.family_relationships(unit_id,adult_member_id,scout_member_id,relationship_type) values(v_unit,v_member,v_child,'guardian');
+     end if;
    end if;
  end loop;
  perform set_config('toolbox.test_unit',v_unit::text,true);
